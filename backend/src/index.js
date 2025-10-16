@@ -29,11 +29,16 @@ app.post("/requests", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const staffDate = await loginStaff(req.body.email, req.body.password);
-    res.cookie("token", staffDate.token, { httpOnly: true });
-    res.json(staffDate);
+    res.cookie("token", staffDate.token);
+    res.json(staffDate.staff);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.get("/login", (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out" });
 });
 
 app.use(auth);

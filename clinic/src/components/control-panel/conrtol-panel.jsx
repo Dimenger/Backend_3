@@ -1,8 +1,25 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./control-panel.module.css";
 
 export const ControlPanel = () => {
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/login");
+      if (!res.ok) {
+        throw new Error("Error " + res.status);
+      }
+      const data = await res.json();
+      console.log(data.message);
+      navigate("/login");
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   return (
     <div className={styles.controlPanel}>
       <Link to="/">
@@ -17,9 +34,9 @@ export const ControlPanel = () => {
         <button className={styles.controlButton}>Requests</button>
       </Link>
 
-      <Link to="/">
-        <button className={styles.controlButton}>Logout</button>
-      </Link>
+      <button className={styles.controlButton} onClick={logout}>
+        Logout
+      </button>
 
       <Link to="staff">
         <button className={styles.controlButton}>Staff</button>
