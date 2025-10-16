@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 
 import { getRequests, addRequest } from "./request.controllers.js";
 import { getStaff, addStaff, loginStaff } from "./staff.controller.js";
-// import { auth } from "./middlewares/auth.js";
+import { auth } from "./middlewares/auth.js";
 
 dotenv.config();
 
@@ -28,12 +28,15 @@ app.post("/requests", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const staff = await loginStaff(req.body.email, req.body.password);
-    res.json(staff);
+    const staffDate = await loginStaff(req.body.email, req.body.password);
+    res.cookie("token", staffDate.token, { httpOnly: true });
+    res.json(staffDate);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.use(auth);
 
 app.get("/requests", async (req, res) => {
   try {

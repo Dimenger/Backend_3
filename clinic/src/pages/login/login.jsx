@@ -25,8 +25,9 @@ export const Login = () => {
         }
         return res.json();
       })
-      .then((staff) => {
-        if (staff.email !== email) {
+      .then((staffDate) => {
+        console.log(staffDate);
+        if (staffDate.staff.email !== email) {
           alert("Wrong email!");
           return;
         }

@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import bcrypt from "bcrypt";
-// import jwt from "jsonwebtoken";
-// import { JWT_SECRET } from "./constant/constants.js";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "./constant/constants.js";
 
 import { Staff } from "./models/Staff.js";
 
@@ -27,12 +27,15 @@ export const loginStaff = async (email, password) => {
       throw new Error("Staff is not found!");
     }
 
-    const isPassword = bcrypt.compare(password, staff.password);
+    const isPassword = await bcrypt.compare(password, staff.password);
     if (!isPassword) {
       throw new Error("Wrong password!");
     }
-    return staff;
+
+    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "5d" });
+
+    return { staff, token };
   } catch (err) {
-    throw new Error("Ошибка идентификации");
+    console.error(err, err.message);
   }
 };
