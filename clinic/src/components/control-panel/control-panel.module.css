@@ -1,0 +1,24 @@
+.controlPanel {
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+    padding: 10px 60px 10px 0;
+    margin-bottom: 5px;
+}
+
+.controlButton {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #850e6b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: x-large;
+}
+
+.controlButton:hover {
+  background-color: #a20db6;
+}
