@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 
-import styles from "./staff.module.css";
+import styles from "./users.module.css";
 
-export const Staff = () => {
-  const [staff, setStaff] = useState([]);
+export const Users = () => {
+  const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/staffs", { credentials: "include" })
+    fetch("http://localhost:3000/users" /*{ credentials: "include" }*/)
       .then((res) => res.json())
       .then((requestsData) => {
-        setStaff(requestsData);
+        setUser(requestsData);
         setLoading(false);
       });
   }, []);
@@ -27,7 +27,7 @@ export const Staff = () => {
   return (
     <div className={styles.tableContainer}>
       <table className={styles.table}>
-        <caption className={styles.caption}>Заявки с формы</caption>
+        <caption className={styles.caption}>Пользователи</caption>
         <thead>
           <tr>
             <th>Enmail</th>
@@ -35,8 +35,8 @@ export const Staff = () => {
           </tr>
         </thead>
         <tbody>
-          {staff.map(({ _id, email, password }) => (
-            <tr key={_id}>
+          {user.map(({ id, email, password }) => (
+            <tr key={id}>
               <td>{email}</td>
               <td>{password}</td>
             </tr>

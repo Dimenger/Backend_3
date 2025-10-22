@@ -4,25 +4,25 @@ import styles from "./request.module.css";
 export const Request = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [textRequest, setTextRequest] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSendRequest = (e) => {
     e.preventDefault();
-    const requestData = { name, phone, textRequest };
+    const date = new Date().toISOString().slice(0, 10);
+    const time = new Date().toISOString().slice(11, 16);
+    const requestData = { name, phone, description, date, time };
 
     fetch("http://localhost:3000/requests", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestData),
-    })
-      .then((res) => res.json())
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    }).catch((error) => {
+      console.error("Error:", error);
+    });
 
     setName("");
     setPhone("");
-    setTextRequest("");
+    setDescription("");
   };
 
   return (
@@ -66,8 +66,8 @@ export const Request = () => {
             id="request"
             rows="4"
             cols="50"
-            value={textRequest}
-            onChange={(e) => setTextRequest(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
           ></textarea>
         </div>

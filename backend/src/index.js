@@ -36,12 +36,19 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/login", (req, res) => {
+app.get("/logout", (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logged out" });
 });
 
 app.use(auth);
+
+app.get("/check-auth", auth, (req, res) => {
+  res.json({
+    message: "Authorized",
+    staff: req.staff,
+  });
+});
 
 app.get("/requests", async (req, res) => {
   try {

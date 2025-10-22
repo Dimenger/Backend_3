@@ -1,7 +1,7 @@
 import { useState } from "react";
-import styles from "./add-staff.module.css";
+import styles from "./add-user.module.css";
 
-export const AddStaff = () => {
+export const AddUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -9,15 +9,13 @@ export const AddStaff = () => {
     e.preventDefault();
     const requestData = { email, password };
 
-    fetch("http://localhost:3000/staffs", {
+    fetch("http://localhost:3000/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestData),
-    })
-      .then((res) => res.json())
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    }).catch((error) => {
+      console.error("Error:", error);
+    });
 
     setEmail("");
     setPassword("");
@@ -38,6 +36,7 @@ export const AddStaff = () => {
             value={email}
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
             required
           />
         </div>
@@ -51,6 +50,7 @@ export const AddStaff = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
             required
           />
         </div>

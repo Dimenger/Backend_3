@@ -2,8 +2,9 @@ import { Layout } from "./layout/layout";
 import { RequestsList } from "./pages/requests-list/requests-list";
 import { Login } from "./pages/login/login";
 import { Request } from "./pages/request/request";
-import { Staff } from "./pages/staff/staff";
-import { AddStaff } from "./pages/add-staff/add-staff";
+import { Users } from "./pages/users/users";
+import { AddUser } from "./pages/add-user/add-user";
+import { PrivateRoute } from "./privat-route/privat-route";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -17,9 +18,30 @@ export const App = () => {
       children: [
         { index: "/", element: <Request /> },
         { path: "login", element: <Login /> },
-        { path: "login/requestsList", element: <RequestsList /> },
-        { path: "staff", element: <Staff /> },
-        { path: "add_staff", element: <AddStaff /> },
+        {
+          path: "requestsList",
+          element: (
+            <PrivateRoute>
+              <RequestsList />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "users",
+          element: (
+            <PrivateRoute>
+              <Users />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "add_user",
+          element: (
+            <PrivateRoute>
+              <AddUser />
+            </PrivateRoute>
+          ),
+        },
       ],
     },
   ]);
