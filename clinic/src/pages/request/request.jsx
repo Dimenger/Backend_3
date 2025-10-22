@@ -6,20 +6,25 @@ export const Request = () => {
   const [phone, setPhone] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSendRequest = (e) => {
+  const handleSendRequest = async (e) => {
     e.preventDefault();
     const date = new Date().toISOString().slice(0, 10);
     const time = new Date().toISOString().slice(11, 16);
-    const requestData = { name, phone, description, date, time };
-
-    fetch("http://localhost:3000/requests", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestData),
-    }).catch((error) => {
-      console.error("Error:", error);
-    });
-
+    const requestData = { date, time, name, phone, description };
+    console.log(requestData);
+    try {
+      const response = await fetch("http://localhost:3000/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+        credentials: "include",
+      });
+      const result = await response.json();
+      console.log("Ответ сервера:", result);
+    } catch (error) {
+      console.error("Ошибка:", error);
+    }
+    console.log(requestData);
     setName("");
     setPhone("");
     setDescription("");

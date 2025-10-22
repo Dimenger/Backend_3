@@ -5,8 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { getRequests, addRequest } from "./request.controllers.js";
-import { getStaff, addStaff, loginStaff } from "./staff.controller.js";
+import { addRequest } from "./request.controllers.js";
 import { auth } from "./middlewares/auth.js";
 
 dotenv.config();
@@ -18,65 +17,66 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
-app.post("/requests", async (req, res) => {
+app.post("/request", async (req, res) => {
   try {
-    await addRequest(req.body.name, req.body.phone, req.body.textRequest);
+    await addRequest(req.body);
+    res.json({ message: "Request was added!" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.post("/login", async (req, res) => {
-  try {
-    const staffDate = await loginStaff(req.body.email, req.body.password);
-    res.cookie("token", staffDate.token);
-    res.json(staffDate.staff);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// app.post("/login", async (req, res) => {
+//   try {
+//     const staffDate = await loginStaff(req.body.email, req.body.password);
+//     res.cookie("token", staffDate.token);
+//     res.json(staffDate.staff);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
-app.get("/logout", (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ message: "Logged out" });
-});
+// app.use(auth);
 
-app.use(auth);
+// app.get("/logout", (req, res) => {
+//   res.clearCookie("token");
+//   res.status(200).json({ message: "Logged out" });
+// });
 
-app.get("/check-auth", auth, (req, res) => {
-  res.json({
-    message: "Authorized",
-    staff: req.staff,
-  });
-});
+// app.get("/check-auth", auth, (req, res) => {
+//   res.json({
+//     message: "Authorized",
+//     staff: req.staff,
+//   });
+// });
 
-app.get("/requests", async (req, res) => {
-  try {
-    const requests = await getRequests();
-    res.json(requests);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// app.get("/requests", async (req, res) => {
+//   try {
+//     const requests = await getRequests();
+//     res.json(requests);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
-app.get("/staffs", async (req, res) => {
-  try {
-    const staff = await getStaff();
-    res.json(staff);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// app.get("/staffs", async (req, res) => {
+//   try {
+//     const staff = await getStaff();
+//     res.json(staff);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
-app.post("/staffs", async (req, res) => {
-  try {
-    await addStaff(req.body.email, req.body.password);
-  } catch (err) {
-    if (err.message.includes("уже существует")) {
-      res.status(400).json({ error: err.message });
-    } else res.status(500).json({ error: err.message });
-  }
-});
+// app.post("/staffs", async (req, res) => {
+//   try {
+//     await addStaff(req.body.email, req.body.password);
+//   } catch (err) {
+//     if (err.message.includes("уже существует")) {
+//       res.status(400).json({ error: err.message });
+//     } else res.status(500).json({ error: err.message });
+//   }
+// });
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;

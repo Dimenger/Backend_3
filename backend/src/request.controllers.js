@@ -7,13 +7,13 @@ export const getRequests = async () => {
   return requests;
 };
 
-export const addRequest = async (name, phone, text) => {
-  const date_request = new Date().toISOString().split("T")[0];
+export const addRequest = async (data) => {
   await Request.create({
-    date_request,
-    name,
-    phone,
-    text,
+    date: data.date,
+    time: data.time,
+    name: data.name,
+    phone: data.phone,
+    description: data.description,
   });
   console.log(chalk.bgGreen("Request was added!"));
 };

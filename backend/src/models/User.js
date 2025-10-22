@@ -3,7 +3,7 @@ import validator from "validator";
 
 const Schema = mongoose.Schema;
 
-const StaffSchema = new Schema({
+const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -19,4 +19,4 @@ const StaffSchema = new Schema({
   },
 });
 
-export const Staff = mongoose.model("Staff", StaffSchema);
+export const Staff = mongoose.model("User", UserSchema);
