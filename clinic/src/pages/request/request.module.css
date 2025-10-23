@@ -1,5 +1,6 @@
 .form_container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 95vh;
@@ -29,6 +30,15 @@
 
 .label {
     font-size: x-large;
+}
+.message{
+  font-size: 20px;
+  visibility: hidden;
+}
+
+.messageInvisible{
+  font-size: 20px;
+  color: green;
 }
 
 input,
