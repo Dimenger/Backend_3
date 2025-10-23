@@ -1,22 +1,14 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-const Schema = mongoose.Schema;
-
-const UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
     unique: true,
-    validate: {
-      validator: validator.isEmail,
-      message: "Invalid email",
-    },
+    validate: { validator: validator.isEmail, message: "Invalid email" },
   },
-  password: {
-    type: String,
-    required: true,
-  },
+  password: { type: String, required: true },
 });
 
-export const Staff = mongoose.model("User", UserSchema);
+export const User = mongoose.model("User", UserSchema);

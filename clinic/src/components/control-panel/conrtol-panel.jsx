@@ -1,19 +1,11 @@
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
-import styles from "./control-panel.module.css";
 import { useContext } from "react";
 import { AuthContext } from "../auth-context";
 
+import styles from "./control-panel.module.css";
+
 export const ControlPanel = () => {
-  const { logout, isAuth } = useContext(AuthContext);
-
-  const navigate = useNavigate();
-
-  const HandleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+  const { isAuth, HandleLogout } = useContext(AuthContext);
 
   return (
     <div className={styles.controlPanel}>

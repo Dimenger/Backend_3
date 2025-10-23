@@ -36,11 +36,7 @@ export const App = () => {
         },
         {
           path: "add_user",
-          element: (
-            <PrivateRoute>
-              <AddUser />
-            </PrivateRoute>
-          ),
+          element: <AddUser />,
         },
       ],
     },

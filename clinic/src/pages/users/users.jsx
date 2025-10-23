@@ -7,7 +7,7 @@ export const Users = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/users" /*{ credentials: "include" }*/)
+    fetch("http://localhost:3000/users", { credentials: "include" })
       .then((res) => res.json())
       .then((requestsData) => {
         setUser(requestsData);
@@ -35,8 +35,8 @@ export const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {user.map(({ id, email, password }) => (
-            <tr key={id}>
+          {user.map(({ _id, email, password }) => (
+            <tr key={_id}>
               <td>{email}</td>
               <td>{password}</td>
             </tr>

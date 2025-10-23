@@ -1,29 +1,74 @@
 import { useState, useEffect } from "react";
 import { AuthContext } from "./auth-context";
+import { useNavigate } from "react-router-dom";
 
 export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
 
-  // Инициализация статуса при запуске
   useEffect(() => {
-    const storedUserId = localStorage.getItem("user_id");
-    setIsAuth(!!storedUserId);
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/auth/me", {
+          credentials: "include",
+        });
+        if (response.ok) {
+          // const data = await response.json();
+          setIsAuth(true);
+        } else if (response.status === 401) {
+          // Пользователь не авторизован, ничего делать не нужно
+          setIsAuth(false);
+        } else {
+          // Обработка других ошибок
+          throw new Error(`Ошибка: ${response.status}`);
+        }
+      } catch (error) {
+        console.error("Ошибка проверки auth:", error);
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  // Логика логина — обновляем состояние и храним в localStorage
-  const login = (userId) => {
-    localStorage.setItem("user_id", userId);
-    setIsAuth(true);
+  const navigate = useNavigate();
+
+  const HandleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/user", {
+        credentials: "include",
+      });
+      setIsAuth(false);
+      const result = await response.json();
+      console.log("result:", result);
+    } catch (error) {
+      console.error("Ошибка:", error);
+    }
+    navigate("/login", { replace: true });
   };
 
-  // Логика выхода — удаляем из localStorage и обновляем состояние
-  const logout = () => {
-    localStorage.removeItem("user_id");
-    setIsAuth(false);
+  const HandleLogin = async (loginDate) => {
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginDate),
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error(`Статус: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log("result", result);
+      setIsAuth(true);
+      navigate("/requestsList");
+    } catch (error) {
+      console.error("Ошибка:", error);
+    }
   };
 
   return (
-    <AuthContext value={{ isAuth, login, logout }}>{children}</AuthContext>
+    <AuthContext value={{ isAuth, HandleLogout, HandleLogin }}>
+      {children}
+    </AuthContext>
   );
 };
 
@@ -34,15 +79,3 @@ export const AuthProvider = ({ children }) => {
   );
   
   Старая запись. С 19 версии .Provider не используется*/
-
-/*
-import { createContext, useContext } from "react";
-
-export const AuthContext = createContext(null);
-
-кастомный хук для передачи в компоненты
-если без него то в компоннетах пишем например
-
-const { login } = useContext(AuthContext); Без хука писать так
-export const useAuth = () => useContext(AuthContext);
-*/

@@ -7,7 +7,7 @@ export const RequestsList = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/requests" /*{ credentials: "include" }*/)
+    fetch("http://localhost:3000/request", { credentials: "include" })
       .then((res) => res.json())
       .then((requestsData) => {
         setRequests(requestsData);
@@ -38,8 +38,8 @@ export const RequestsList = () => {
           </tr>
         </thead>
         <tbody>
-          {requests.map(({ id, date, time, name, phone, description }) => (
-            <tr key={id}>
+          {requests.map(({ _id, date, time, name, phone, description }) => (
+            <tr key={_id}>
               <td>{date}</td>
               <td>{time}</td>
               <td>{name}</td>

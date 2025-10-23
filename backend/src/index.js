@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { addRequest } from "./request.controllers.js";
+import { addRequest, getRequests } from "./request.controllers.js";
+import { addUser, loginUser, getUsers } from "./user.controller.js";
 import { auth } from "./middlewares/auth.js";
 
 dotenv.config();
@@ -26,57 +27,61 @@ app.post("/request", async (req, res) => {
   }
 });
 
-// app.post("/login", async (req, res) => {
-//   try {
-//     const staffDate = await loginStaff(req.body.email, req.body.password);
-//     res.cookie("token", staffDate.token);
-//     res.json(staffDate.staff);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
+app.post("/login", async (req, res) => {
+  try {
+    console.log(req.body);
+    const token = await loginUser(req.body.email, req.body.password);
+    res.cookie("token", token, { httpOnly: true });
+    res.json("Пользователь вошел!");
+  } catch (error) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// app.use(auth);
+app.use(auth);
 
-// app.get("/logout", (req, res) => {
-//   res.clearCookie("token");
-//   res.status(200).json({ message: "Logged out" });
-// });
+app.get("/auth/me", async (req, res) => {
+  // req.user — это результат jwt.verify
+  res.json({ authorized: false });
+});
 
-// app.get("/check-auth", auth, (req, res) => {
-//   res.json({
-//     message: "Authorized",
-//     staff: req.staff,
-//   });
-// });
+app.get("/request", async (req, res) => {
+  try {
+    res.json(await getRequests());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// app.get("/requests", async (req, res) => {
-//   try {
-//     const requests = await getRequests();
-//     res.json(requests);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
+app.get("/users", async (req, res) => {
+  try {
+    res.json(await getUsers());
+  } catch (error) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// app.get("/staffs", async (req, res) => {
-//   try {
-//     const staff = await getStaff();
-//     res.json(staff);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
+app.get("/user", async (req, res) => {
+  try {
+    const token = "";
+    res.cookie("token", token, { httpOnly: true });
+    res.json("Пользователь вышел!");
+  } catch (error) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// app.post("/staffs", async (req, res) => {
-//   try {
-//     await addStaff(req.body.email, req.body.password);
-//   } catch (err) {
-//     if (err.message.includes("уже существует")) {
-//       res.status(400).json({ error: err.message });
-//     } else res.status(500).json({ error: err.message });
-//   }
-// });
+app.post("/user", async (req, res) => {
+  try {
+    await addUser(req.body.email, req.body.password);
+    res.json({ message: "User was added!" });
+  } catch (err) {
+    if (err === 11000) {
+      res.status(11000).json("The email already exists!");
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;

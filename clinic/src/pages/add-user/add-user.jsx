@@ -5,17 +5,26 @@ export const AddUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSendRequest = (e) => {
+  const handleSendRequest = async (e) => {
     e.preventDefault();
-    const requestData = { email, password };
 
-    fetch("http://localhost:3000/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestData),
-    }).catch((error) => {
-      console.error("Error:", error);
-    });
+    const newUser = { email, password };
+
+    try {
+      const response = await fetch("http://localhost:3000/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error(`Статус: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log("Ответ сервера:", result);
+    } catch (error) {
+      console.error("Ошибка:", error);
+    }
 
     setEmail("");
     setPassword("");

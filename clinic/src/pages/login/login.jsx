@@ -1,7 +1,5 @@
-import { /*useContext*/ useState } from "react";
-import { useNavigate } from "react-router";
-// import { AuthContext } from "../../components/auth-context";
-import { useAuth } from "../../components/auth-context";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../components/auth-context";
 
 import styles from "./login.module.css";
 
@@ -9,28 +7,15 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login } = useAuth(); /* кастомный хук */
-  // const { login } = useContext(AuthContext); Без хука писать так
+  const loginDate = { email, password };
 
-  const navigate = useNavigate();
+  const { HandleLogin } = useContext(AuthContext);
 
   const handleSendValidation = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3000/users");
-    const users = await response.json();
-    const emails = users.map((item) => item.email);
-    const passwords = users.map((item) => item.password);
-    if (!emails.includes(email)) {
-      alert("email not exist");
-      return;
-    }
-    if (!passwords.includes(password)) {
-      alert("password not exist");
-      return;
-    }
-    const user_id = users.find((item) => item.email === email).id;
-    login(user_id);
-    navigate("/requestsList");
+    HandleLogin(loginDate);
+    setEmail("");
+    setPassword("");
   };
 
   return (

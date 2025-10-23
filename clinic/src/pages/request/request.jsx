@@ -8,10 +8,11 @@ export const Request = () => {
 
   const handleSendRequest = async (e) => {
     e.preventDefault();
+
     const date = new Date().toISOString().slice(0, 10);
     const time = new Date().toISOString().slice(11, 16);
     const requestData = { date, time, name, phone, description };
-    console.log(requestData);
+
     try {
       const response = await fetch("http://localhost:3000/request", {
         method: "POST",
@@ -19,12 +20,15 @@ export const Request = () => {
         body: JSON.stringify(requestData),
         credentials: "include",
       });
+      if (!response.ok) {
+        throw new Error(`Статус: ${response.status}`);
+      }
       const result = await response.json();
       console.log("Ответ сервера:", result);
     } catch (error) {
       console.error("Ошибка:", error);
     }
-    console.log(requestData);
+
     setName("");
     setPhone("");
     setDescription("");
