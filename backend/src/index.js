@@ -29,13 +29,15 @@ app.post("/request", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    console.log(req.body);
     const token = await loginUser(req.body.email, req.body.password);
     res.cookie("token", token, { httpOnly: true });
-    res.json("Пользователь вошел!");
+    res.json({ success: true, message: "Пользователь вошел!" });
   } catch (error) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: error.message });
   }
+  /*В случае ошибок loginUser — мы делаем throw error, 
+  чтобы в маршруте его поймать и вернуть статус 400 и JSON с ошибкой.
+  В случае успеха — возвращаем JSON с флагом успеха.*/
 });
 
 app.use(auth);

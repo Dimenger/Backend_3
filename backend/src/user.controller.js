@@ -18,7 +18,7 @@ export const loginUser = async (email, password) => {
     }
     return jwt.sign({ email }, JWT_SECRET, { expiresIn: "5d" });
   } catch (error) {
-    console.error("Ошибка:", error);
+    throw error; /* выкинет ошибку наружу*/
   }
 };
 
@@ -27,7 +27,7 @@ export const getUsers = async () => {
     const users = await User.find();
     return users;
   } catch (error) {
-    console.error("Ошибка:", error);
+    throw error;
   }
 };
 

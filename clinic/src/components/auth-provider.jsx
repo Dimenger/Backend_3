@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
         credentials: "include",
       });
       setIsAuth(false);
+
       const result = await response.json();
       console.log("result:", result);
     } catch (error) {
@@ -53,14 +54,18 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify(loginDate),
         credentials: "include",
       });
+      const result = await response.json();
+
       if (!response.ok) {
+        alert(`Ошибка при входе: ${result.error}`);
         throw new Error(`Статус: ${response.status}`);
       }
-      const result = await response.json();
       console.log("result", result);
       setIsAuth(true);
+
       navigate("/requestsList");
     } catch (error) {
+      alert("Произошла ошибка: " + error.message);
       console.error("Ошибка:", error);
     }
   };

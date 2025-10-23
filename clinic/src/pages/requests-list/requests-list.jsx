@@ -7,12 +7,16 @@ export const RequestsList = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/request", { credentials: "include" })
-      .then((res) => res.json())
-      .then((requestsData) => {
-        setRequests(requestsData);
-        setLoading(false);
-      });
+    try {
+      fetch("http://localhost:3000/request", { credentials: "include" })
+        .then((res) => res.json())
+        .then((requestsData) => {
+          setRequests(requestsData);
+          setLoading(false);
+        });
+    } catch (err) {
+      console.error("Ошибка:", err);
+    }
   }, []);
 
   if (loading) {
